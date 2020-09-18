@@ -5,27 +5,27 @@ import firebase from 'firebase';
 import db from '../config'
 import MyHeader from '../components/MyHeader';
 
-export default class BookDonateScreen extends Component{
+export default class DonateScreen extends Component{
   constructor(){
     super()
     this.state = {
-      requestedBooksList : []
+      requestedItemsList : []
     }
   this.requestRef= null
   }
 
-  getRequestedBooksList =()=>{
-    this.requestRef = db.collection("requested_books")
+  getRequestedItemList =()=>{
+    this.requestRef = db.collection("requested_items")
     .onSnapshot((snapshot)=>{
-      var requestedBooksList = snapshot.docs.map(document => document.data());
+      var requestedItemList = snapshot.docs.map(document => document.data());
       this.setState({
-        requestedBooksList : requestedBooksList
+        requestedItemsList : requestedItemList
       });
     })
   }
 
   componentDidMount(){
-    this.getRequestedBooksList()
+    this.getRequestedItemList()
   }
 
   componentWillUnmount(){
@@ -38,12 +38,13 @@ export default class BookDonateScreen extends Component{
     return (
       <ListItem
         key={i}
-        title={item.book_name}
+        title={item.item_name}
         subtitle={item.reason_to_request}
-        titleStyle={{ color: 'black', fontWeight: 'bold' }}
+        titleStyle={{ color: 'black', fontWeight: 'bold', fontSize: 20 }}
+        subtitleStyle={{ color: 'black', fontSize: 15 }}
         rightElement={
             <TouchableOpacity style={styles.button}>
-              <Text style={{color:'#ffff'}}>View</Text>
+              <Text style={{color:'#ffff', fontWeight: "bold"}}>VIEW  </Text>
             </TouchableOpacity>
           }
         bottomDivider
@@ -54,19 +55,19 @@ export default class BookDonateScreen extends Component{
   render(){
     return(
       <View style={{flex:1}}>
-        <MyHeader title="Donate Books"/>
-        <View style={{flex:1}}>
+        <MyHeader title="DONATE AN ITEM"/>
+        <View style={{flex:1, backgroundColor: "lightblue"}}>
           {
-            this.state.requestedBooksList.length === 0
+            this.state.requestedItemsList.length === 0
             ?(
               <View style={styles.subContainer}>
-                <Text style={{ fontSize: 20}}>List Of All Requested Books</Text>
+                <Text style={{ fontSize: 20}}>List Of All Requested Items</Text>
               </View>
             )
             :(
               <FlatList
                 keyExtractor={this.keyExtractor}
-                data={this.state.requestedBooksList}
+                data={this.state.requestedItemsList}
                 renderItem={this.renderItem}
               />
             )
@@ -82,14 +83,15 @@ const styles = StyleSheet.create({
     flex:1,
     fontSize: 20,
     justifyContent:'center',
-    alignItems:'center'
+    alignItems:'center',
+    backgroundColor: "lightblue"
   },
   button:{
     width:100,
     height:30,
     justifyContent:'center',
     alignItems:'center',
-    backgroundColor:"#ff5722",
+    backgroundColor:"blue",
     shadowColor: "#000",
     shadowOffset: {
        width: 0,
