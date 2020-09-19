@@ -3,6 +3,7 @@ import {createDrawerNavigator} from 'react-navigation-drawer';
 import { AppTabNavigator } from './AppTabNavigator';
 import CustomSideBarMenu from './CustomSideBarMenu';
 import {Image} from 'react-native'; 
+import SettingsScreen from '../screens/SettingsScreen';
 
 export const AppDrawerNavigator = createDrawerNavigator({
     Home: {
@@ -10,9 +11,12 @@ export const AppDrawerNavigator = createDrawerNavigator({
         navigationOptions: {
             title: 'HOME ACTIVITY',
         },
-        headerStyle: {
-            background: "red"
-        }
+},
+Settings: {
+    screen: SettingsScreen,
+    navigationOptions: {
+        title: 'SETTINGS',
+    },
 }
 },
 {
