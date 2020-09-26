@@ -12,7 +12,8 @@ export default class RequestScreen extends React.Component {
         this.state = {
             userID: firebase.auth().currentUser.email,
             itemName: "",
-            reasonToRequest: ''
+            reasonToRequest: '',
+            userName: ''
         }
     }
 
@@ -20,14 +21,24 @@ export default class RequestScreen extends React.Component {
         return Math.random().toString(36).substring(7);
     }
     
+    
       addRequest =(itemName,reasonToRequest)=>{
         var userId = this.state.userID;
         var randomRequestId = this.createUniqueId();
+
+        db.collection("users").where("emailId","==",this.state.userID).get()
+        .then(data=>{
+            data.forEach(doc=>{
+                this.setState({userName: doc.data().firstName})
+            })
+        })
+
         db.collection('requested_items').add({
             "user_id": userId,
             "item_name":itemName,
             "reason_to_request":reasonToRequest,
             "request_id"  : randomRequestId,
+            "userName": this.state.userName,
         })
     
         this.setState({
@@ -67,7 +78,16 @@ export default class RequestScreen extends React.Component {
                     <TouchableOpacity 
                         style={styles.button}
                         onPress={()=>{
-                            this.addRequest(this.state.itemName,this.state.reasonToRequest);
+                            if(this.state.itemName===""){
+                                Alert.alert("Please enter the name of the item");
+                            }
+                    
+                            else if(this.state.reasonToRequest==""){
+                                Alert.alert("Please enter the reason to request");
+                            }
+                            else {
+                                this.addRequest(this.state.itemName,this.state.reasonToRequest);
+                            }
                         }}>
                         <Text style={{fontWeight: "bold", color: "white", fontSize: 18}}>REQUEST  </Text>
                     </TouchableOpacity>

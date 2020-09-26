@@ -43,7 +43,10 @@ export default class DonateScreen extends Component{
         titleStyle={{ color: 'black', fontWeight: 'bold', fontSize: 20 }}
         subtitleStyle={{ color: 'black', fontSize: 15 }}
         rightElement={
-            <TouchableOpacity style={styles.button}>
+            <TouchableOpacity style={styles.button}
+            onPress={()=>{
+              this.props.navigation.navigate("ReceiverDetails",{"details":item});
+            }}>
               <Text style={{color:'#ffff', fontWeight: "bold"}}>VIEW  </Text>
             </TouchableOpacity>
           }
