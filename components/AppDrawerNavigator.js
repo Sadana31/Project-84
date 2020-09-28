@@ -5,6 +5,7 @@ import CustomSideBarMenu from './CustomSideBarMenu';
 import {Image} from 'react-native'; 
 import SettingsScreen from '../screens/SettingsScreen';
 import MyBarters from '../screens/MyBarters';
+import NotificationsScreen from '../screens/NotificationScreen';
 
 export const AppDrawerNavigator = createDrawerNavigator({
     Home: {
@@ -21,6 +22,11 @@ export const AppDrawerNavigator = createDrawerNavigator({
         screen: SettingsScreen,
         navigationOptions: {
         title: "SETTINGS"
+    }},
+    Notifications: {
+        screen: NotificationsScreen,
+        navigationOptions: {
+        title: "NOTIFICATIONS"
     }},
 },
 {

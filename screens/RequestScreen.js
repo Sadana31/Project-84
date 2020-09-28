@@ -23,21 +23,21 @@ export default class RequestScreen extends React.Component {
     
     
       addRequest =(itemName,reasonToRequest)=>{
-        var userId = this.state.userID;
+        var userID = this.state.userID;
         var randomRequestId = this.createUniqueId();
 
-        db.collection("users").where("emailId","==",this.state.userID).get()
+        db.collection("users").where("emailID","==",this.state.userID).get()
         .then(data=>{
             data.forEach(doc=>{
                 this.setState({userName: doc.data().firstName})
             })
         })
 
-        db.collection('requested_items').add({
-            "user_id": userId,
-            "item_name":itemName,
-            "reason_to_request":reasonToRequest,
-            "request_id"  : randomRequestId,
+        db.collection('requestedItems').add({
+            "userID": userID,
+            "itemName":itemName,
+            "reasonToRequest":reasonToRequest,
+            "requestID"  : randomRequestId,
             "userName": this.state.userName,
         })
     
@@ -99,7 +99,6 @@ export default class RequestScreen extends React.Component {
 
 const styles = StyleSheet.create({
     keyBoardStyle : {
-        // flex:1,
         alignItems:'center',
         justifyContent:'center',
         backgroundColor: "lightblue"

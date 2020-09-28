@@ -28,33 +28,92 @@ export default class MyBarters extends React.Component {
     }
 
     getAllDonations=()=>{
-        this.requestRef = db.collection("all_donations")
-        .where("donor_id","==",this.state.donorId)
+        this.requestRef = db.collection("allDonations")
+        .where("donorID","==",this.state.donorId)
         .onSnapshot((snapshot)=>{
             var allDonations = snapshot.docs.map(document=>document.data());
             this.setState({allDonations: allDonations});
         })
     }
 
+    getDonorDetails=(donorId)=>{
+      db.collection("users").where("emailID","==", donorId).get()
+      .then((snapshot)=>{
+        snapshot.forEach((doc) => {
+          this.setState({
+            donorName : doc.data().firstName + " " + doc.data().lastName
+          })
+        });
+      })
+  }
+
     componentDidMount(){
         this.getAllDonations();
+        this.getDonorDetails(this.state.donorId)
     }
+
+    sendNotification=(itemDetails, requestStatus)=>{
+      var requestId = itemDetails.requestID;
+      var donorId = itemDetails.donorID;
+      db.collection("allNotifications")
+      .where("requestID","==",requestId)
+      .where("donorID","==",donorId).get()
+      .then((snapshot)=>{
+          snapshot.forEach((doc)=>{
+              var message = "";
+              if(requestStatus === "item Sent"){
+                  message = this.state.donorName + "sent you the item";
+              }
+              else {
+                  message = this.state.donorName + "has shown interest in donating the item";
+              }
+
+              db.collection("allNotifications").doc(doc.id).update({
+                  "message": message,
+                  "notificationStatus": "unread",
+                  "date": firebase.firestore.FieldValue.serverTimestamp(),
+              })
+          })
+      })
+  }
+
+  senditem=(itemDetails)=>{
+    if(itemDetails.requestStatus === "item Sent"){
+        var requestStatus = "Donor Interested";
+        db.collection("allDonations").doc(itemDetails.docID)
+        .update({
+            "requestStatus": "Donor Interested"
+        })
+        this.sendNotification(itemDetails,requestStatus);
+    }
+    else { 
+        var requestStatus = "item Sent";
+        db.collection("allDonations").doc(itemDetails.docID)
+        .update({
+            "requestStatus": "item Sent"
+        })
+        this.sendNotification(itemDetails,requestStatus);
+    }
+  }
 
     keyExtractor =(item,index)=> index.toString();
 
     renderItem=({item,i})=>(
         <ListItem 
         key={i}
-        title={item.item_name}
-        subtitle = {"Requested by: " + item.requested_by + "\nStatus:" + item.request_status}
+        title={item.itemName}
+        subtitle = {"Requested by: " + item.requestedBy + "\nStatus:" + item.requestStatus}
         leftElement={<Icon icon name="list" color="#696969"
         titleStyle={{color: "black", fontWeight: "bold"}}/>}
         rightElement={
         <TouchableOpacity 
         style={[styles.button, 
-                {backgroundColor: item.request_status==="item Sent" ? "green" : "#ff5722"}]}>
+                {backgroundColor: item.requestStatus==="item Sent" ? "green" : "#ff5722"}]}
+        onPress={()=>{
+          this.senditem(item);
+        }}>
             <Text style={{color: "white"}}>
-                {item.request_status === "item Sent" ? "item Sent" : "Send item"}
+                {item.requestStatus === "item Sent" ? "item Sent" : "Send item"}
             </Text>
         </TouchableOpacity>}
         bottomDivider />

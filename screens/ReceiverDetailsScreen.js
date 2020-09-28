@@ -9,21 +9,21 @@ export default class ReceiverDetailsScreen extends React.Component {
     constructor(props){
         super(props);
         this.state = {
-            userId: firebase.auth().currentUser.email,
-            receiverId: this.props.navigation.getParam("details")["user_id"],
-            requestId: this.props.navigation.getParam("details")["request_id"],
-            itemName: this.props.navigation.getParam("details")["item_name"],
-            reason_for_requesting: this.props.navigation.getParam("details")["reason_to_request"],
+            userID: firebase.auth().currentUser.email,
+            receiverId: this.props.navigation.getParam("details")["userID"],
+            requestId: this.props.navigation.getParam("details")["requestID"],
+            itemName: this.props.navigation.getParam("details")["itemName"],
+            reasonForRequesting: this.props.navigation.getParam("details")["reasonToRequest"],
             receiverName: "",
             receiverContact: "",
             receiverAddress: "",
             receiverRequestDocId: "",
-            userName: this.props.navigation.getParam("details")["firstName"]
+            userName: ""
         }
     }
 
     getReceiverDetails=()=>{
-        db.collection("users").where("emailId","==",this.state.userId).get()
+        db.collection("users").where("emailID","==",this.state.receiverId).get()
         .then(snapshot=>{
             snapshot.forEach(doc=>{
                 this.setState({
@@ -33,36 +33,31 @@ export default class ReceiverDetailsScreen extends React.Component {
                 })
             })
         })
-        db.collection("requested_items").where("request_id","==",this.state.requestId).get()
-        .then(snapshot=>{
-            snapshot.forEach(doc=>{
-                this.setState({receiverRequestDocId: doc.id});
-            })
-        })
     }
 
     componentDidMount(){
         this.getReceiverDetails();
     }
 
-    updateItemStatus=()=>{
-        db.collection("all_donations").add({
-            item_name: this.state.itemName,
-            request_id: this.state.requestId,
-            requested_by: this.state.receiverName,
-            donor_id: this.state.userId,
-            request_status: "Donor Interested"
+    updateitemStatus=()=>{
+        db.collection("allDonations").add({
+            itemName: this.state.itemName,
+            requestID: this.state.requestId,
+            requestedBy: this.state.receiverName,
+            donorID: this.state.receiverId,
+            requestStatus: "Donor Interested"
         })
     }
 
     addNotification=()=>{
-        var message = this.state.receiverName + " has shown interest in donating the item";
-        db.collection("all_notifications").add({
-            "donor_id": this.state.userId,
-            "request_id": this.state.requestId,
-            "item_name": this.state.itemName,
+        var message = this.state.userName + " has shown interest in donating the item";
+        db.collection("allNotifications").add({
+            "requesterID": this.state.receiverId,
+            "donorID": this.state.userID,
+            "requestID": this.state.requestId,
+            "itemName": this.state.itemName,
             "date": firebase.firestore.FieldValue.serverTimestamp(),
-            "notification_status": "unread",
+            "notificationStatus": "unread",
             "message": message
         })
     }
@@ -93,7 +88,7 @@ export default class ReceiverDetailsScreen extends React.Component {
                         <Text style={{fontWeight: "bold"}}>NAME: {this.state.itemName}</Text>
                     </Card>
                     <Card>
-                        <Text style={{fontWeight: "bold"}}>REASON: {this.state.reason_for_requesting}</Text>
+                        <Text style={{fontWeight: "bold"}}>REASON: {this.state.reasonForRequesting}</Text>
                     </Card>
                 </View>
 
@@ -110,19 +105,19 @@ export default class ReceiverDetailsScreen extends React.Component {
                             <Text style={{fontWeight: "bold"}}>CONTACT: {this.state.receiverContact}</Text>
                         </Card>
                         <Card>
-                            <Text style={{fontWeight: "bold"}}>ADDRESS: {this.state.address}</Text>
+                            <Text style={{fontWeight: "bold"}}>ADDRESS: {this.state.receiverAddress}</Text>
                         </Card>
                 </View>
 
                 <View style={styles.buttonContainer}>
                     {
-                        this.state.receiverId !== this.state.userId
+                        this.state.receiverId !== this.state.userID
                         ? (
                             <TouchableOpacity style={styles.button}
                             onPress={()=>{
-                            this.updateItemStatus();
+                            this.updateitemStatus();
                             this.addNotification();
-                            //this.props.navigation.navigate("MyDonations");
+                            this.props.navigation.navigate("MyBarters");
                             }}>
                                 <Text style={{fontWeight: "bold", color: "white", textAlign: "center"}}>
                                     I WANT TO DONATE THIS

@@ -15,7 +15,7 @@ export default class SettingsScreen extends React.Component {
     constructor(){
       super();
       this.state={
-        emailId   : '',
+        emailID   : '',
         firstName : '',
         lastName  : '',
         address   : '',
@@ -26,12 +26,12 @@ export default class SettingsScreen extends React.Component {
   
     getData=()=>{
       var email = firebase.auth().currentUser.email;
-      db.collection('users').where('emailId','==',email).get()
+      db.collection('users').where('emailID','==',email).get()
       .then((snapshot) => {
         snapshot.forEach((doc) => {
         var data = doc.data()
           this.setState({
-            emailId   : data.emailId,
+            emailID   : data.emailID,
             firstName : data.firstName,
             lastName  : data.lastName,
             address   : data.address,
@@ -49,7 +49,7 @@ export default class SettingsScreen extends React.Component {
         "lastName" : this.state.lastName,
         "address"   : this.state.address,
         "contact"   : this.state.contact,
-        "emailId": this.state.emailId
+        "emailID": this.state.emailID
       })
   
       return Alert.alert("Profile Updated Successfully!!");
@@ -137,7 +137,7 @@ export default class SettingsScreen extends React.Component {
                     address: text
                   })
                 }}
-                  value ={this.state.emailId}
+                  value ={this.state.emailID}
               />
 
               <TouchableOpacity style={styles.button}

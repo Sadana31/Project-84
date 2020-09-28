@@ -10,7 +10,7 @@ export default class SignUpLoginScreen extends React.Component {
     constructor(){
         super();
         this.state = {
-            emailId: '',
+            emailID: '',
             password: '',
             isModalVisible: false,
             firstName: '',
@@ -57,7 +57,7 @@ export default class SignUpLoginScreen extends React.Component {
                     lastName: this.state.lastName,
                     contact: this.state.contact,
                     address: this.state.address,
-                    emailId: this.state.emailId,
+                    emailID: this.state.emailID,
                 })
 
                 return  Alert.alert(
@@ -134,7 +134,7 @@ export default class SignUpLoginScreen extends React.Component {
                     keyboardType ={'email-address'}
                     onChangeText={(text)=>{
                       this.setState({
-                        emailId: text
+                        emailID: text
                       })
                     }}
                   /><TextInput
@@ -176,7 +176,7 @@ export default class SignUpLoginScreen extends React.Component {
                             return Alert.alert("Please enter all your password!!");
                         }
                         else {
-                            this.userSignUp(this.state.emailId, this.state.password, this.state.confirmPassword)
+                            this.userSignUp(this.state.emailID, this.state.password, this.state.confirmPassword)
                         }
                       }}
                     >
@@ -222,7 +222,7 @@ export default class SignUpLoginScreen extends React.Component {
                         keyboardType ='email-address'
                         onChangeText={(text)=>{
                         this.setState({
-                            emailId: text
+                            emailID: text
                         })
                         }}
                     />
@@ -239,7 +239,7 @@ export default class SignUpLoginScreen extends React.Component {
                     <TouchableOpacity
                         style={styles.buttons}
                         onPress={()=>{
-                            this.login(this.state.emailId,this.state.password);
+                            this.login(this.state.emailID,this.state.password);
                             this.setState({emailID: "", password: ""});
                         }}
                     >

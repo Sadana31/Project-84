@@ -15,7 +15,7 @@ export default class DonateScreen extends Component{
   }
 
   getRequestedItemList =()=>{
-    this.requestRef = db.collection("requested_items")
+    this.requestRef = db.collection("requestedItems")
     .onSnapshot((snapshot)=>{
       var requestedItemList = snapshot.docs.map(document => document.data());
       this.setState({
@@ -38,8 +38,8 @@ export default class DonateScreen extends Component{
     return (
       <ListItem
         key={i}
-        title={item.item_name}
-        subtitle={item.reason_to_request}
+        title={item.itemName}
+        subtitle={item.reasonToRequest}
         titleStyle={{ color: 'black', fontWeight: 'bold', fontSize: 20 }}
         subtitleStyle={{ color: 'black', fontSize: 15 }}
         rightElement={
