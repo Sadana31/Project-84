@@ -18,15 +18,15 @@ export const AppDrawerNavigator = createDrawerNavigator({
         navigationOptions: {
         title: "MY BARTERS"
     }},
+    Notifications: {
+        screen: NotificationsScreen,
+        navigationOptions: {
+        title: "NOTIFICATIONS TO"
+    }},
     Settings: {
         screen: SettingsScreen,
         navigationOptions: {
         title: "SETTINGS"
-    }},
-    Notifications: {
-        screen: NotificationsScreen,
-        navigationOptions: {
-        title: "NOTIFICATIONS"
     }},
 },
 {

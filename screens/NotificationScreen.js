@@ -45,10 +45,11 @@ export default class NotificationScreen extends Component{
       return (
         <ListItem
           key={index}
-          leftElement={<Icon type="list" color ='#696969'/>}
+          leftElement={<Icon name="list" color ='#696969'/>}
           title={item.itemName}
-          titleStyle={{ color: 'black', fontWeight: 'bold' }}
+          titleStyle={{ color: 'black', fontWeight: 'bold', fontSize: 20 }}
           subtitle={item.message}
+          subtitleStyle={{fontSize: 15}}
           bottomDivider
         />
       )

@@ -24,7 +24,7 @@ export default class RequestScreen extends React.Component {
     
       addRequest =(itemName,reasonToRequest)=>{
         var userID = this.state.userID;
-        var randomRequestId = this.createUniqueId();
+        var randomrequestID = this.createUniqueId();
 
         db.collection("users").where("emailID","==",this.state.userID).get()
         .then(data=>{
@@ -37,7 +37,7 @@ export default class RequestScreen extends React.Component {
             "userID": userID,
             "itemName":itemName,
             "reasonToRequest":reasonToRequest,
-            "requestID"  : randomRequestId,
+            "requestID"  : randomrequestID,
             "userName": this.state.userName,
         })
     

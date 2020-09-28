@@ -11,7 +11,7 @@ export default class ReceiverDetailsScreen extends React.Component {
         this.state = {
             userID: firebase.auth().currentUser.email,
             receiverId: this.props.navigation.getParam("details")["userID"],
-            requestId: this.props.navigation.getParam("details")["requestID"],
+            requestID: this.props.navigation.getParam("details")["requestID"],
             itemName: this.props.navigation.getParam("details")["itemName"],
             reasonForRequesting: this.props.navigation.getParam("details")["reasonToRequest"],
             receiverName: "",
@@ -33,6 +33,14 @@ export default class ReceiverDetailsScreen extends React.Component {
                 })
             })
         })
+        db.collection("users").where("emailID","==",this.state.userID).get()
+        .then(snapshot=>{
+            snapshot.forEach(doc=>{
+                this.setState({
+                    userName: doc.data().firstName,
+                })
+            })
+        })
     }
 
     componentDidMount(){
@@ -40,9 +48,9 @@ export default class ReceiverDetailsScreen extends React.Component {
     }
 
     updateitemStatus=()=>{
-        db.collection("allDonations").add({
+        db.collection("allBarters").add({
             itemName: this.state.itemName,
-            requestID: this.state.requestId,
+            requestID: this.state.requestID,
             requestedBy: this.state.receiverName,
             donorID: this.state.receiverId,
             requestStatus: "Donor Interested"
@@ -54,11 +62,13 @@ export default class ReceiverDetailsScreen extends React.Component {
         db.collection("allNotifications").add({
             "requesterID": this.state.receiverId,
             "donorID": this.state.userID,
-            "requestID": this.state.requestId,
+            "requestID": this.state.requestID,
             "itemName": this.state.itemName,
             "date": firebase.firestore.FieldValue.serverTimestamp(),
             "notificationStatus": "unread",
-            "message": message
+            "message": message,
+            "receiverName": this.state.receiverName,
+            "donorName": this.state.userName
         })
     }
 

@@ -20,24 +20,24 @@ export default class MyBarters extends React.Component {
     constructor(){
         super();
         this.state = {
-            donorId: firebase.auth().currentUser.email,
-            allDonations: [],
+            donorID: firebase.auth().currentUser.email,
+            allBarters: [],
             donorName: "",
         }
         this.requestRef = null;
     }
 
-    getAllDonations=()=>{
-        this.requestRef = db.collection("allDonations")
-        .where("donorID","==",this.state.donorId)
+    getAllBarters=()=>{
+        this.requestRef = db.collection("allBarters")
+        .where("donorID","==",this.state.donorID)
         .onSnapshot((snapshot)=>{
-            var allDonations = snapshot.docs.map(document=>document.data());
-            this.setState({allDonations: allDonations});
+            var barters = snapshot.docs.map(document=>document.data());
+            this.setState({allBarters: barters});
         })
     }
 
-    getDonorDetails=(donorId)=>{
-      db.collection("users").where("emailID","==", donorId).get()
+    getDonorDetails=(donorID)=>{
+      db.collection("users").where("emailID","==", donorID).get()
       .then((snapshot)=>{
         snapshot.forEach((doc) => {
           this.setState({
@@ -48,16 +48,16 @@ export default class MyBarters extends React.Component {
   }
 
     componentDidMount(){
-        this.getAllDonations();
-        this.getDonorDetails(this.state.donorId)
+        this.getAllBarters();
+        this.getDonorDetails(this.state.donorName)
     }
 
     sendNotification=(itemDetails, requestStatus)=>{
-      var requestId = itemDetails.requestID;
-      var donorId = itemDetails.donorID;
+      var requestID = itemDetails.requestID;
+      var donorID = itemDetails.donorID;
       db.collection("allNotifications")
-      .where("requestID","==",requestId)
-      .where("donorID","==",donorId).get()
+      .where("requestID","==",requestID)
+      .where("donorID","==",donorID).get()
       .then((snapshot)=>{
           snapshot.forEach((doc)=>{
               var message = "";
@@ -78,15 +78,7 @@ export default class MyBarters extends React.Component {
   }
 
   senditem=(itemDetails)=>{
-    if(itemDetails.requestStatus === "item Sent"){
-        var requestStatus = "Donor Interested";
-        db.collection("allDonations").doc(itemDetails.docID)
-        .update({
-            "requestStatus": "Donor Interested"
-        })
-        this.sendNotification(itemDetails,requestStatus);
-    }
-    else { 
+    if(itemDetails.requestStatus === "Donor Interested"){
         var requestStatus = "item Sent";
         db.collection("allDonations").doc(itemDetails.docID)
         .update({
@@ -113,7 +105,7 @@ export default class MyBarters extends React.Component {
           this.senditem(item);
         }}>
             <Text style={{color: "white"}}>
-                {item.requestStatus === "item Sent" ? "item Sent" : "Send item"}
+                {item.requestStatus === "Donor Interested" ? "Send Item" : "Item Sent"}
             </Text>
         </TouchableOpacity>}
         bottomDivider />
@@ -126,19 +118,19 @@ export default class MyBarters extends React.Component {
     render(){
         return(
           <View style={{flex:1}}>
-            <MyHeader navigation={this.props.navigation} title="My Donations"/>
+            <MyHeader navigation={this.props.navigation} title="My Barters"/>
             <View style={{flex:1}}>
               {
-                this.state.allDonations.length === 0
+                this.state.allBarters.length === 0
                 ?(
                   <View style={styles.subtitle}>
-                    <Text style={{ fontSize: 20}}>List of all item Donations</Text>
+                    <Text style={{ fontSize: 20}}>List of all Barters</Text>
                   </View>
                 )
                 :(
                   <FlatList
                     keyExtractor={this.keyExtractor}
-                    data={this.state.allDonations}
+                    data={this.state.allBarters}
                     renderItem={this.renderItem}
                   />
                 )
