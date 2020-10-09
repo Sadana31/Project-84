@@ -21,12 +21,12 @@ export default class NotificationScreen extends Component{
   getNotifications=()=>{
     this.requestRef = db.collection("allNotifications")
     .where("notificationStatus", "==", "unread")
-    .where("requesterID",'==',this.state.userID)
+    .where("requesterID",'==',this.state.userId)
     .onSnapshot((snapshot)=>{
       var allNotifications =  []
       snapshot.docs.map((doc) =>{
-        var notification = doc.data();
-        notification["docID"] = doc.id
+        var notification = doc.data()
+        notification["doc_id"] = doc.id
         allNotifications.push(notification)
       });
       this.setState({

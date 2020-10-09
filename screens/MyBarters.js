@@ -31,8 +31,13 @@ export default class MyBarters extends React.Component {
         this.requestRef = db.collection("allBarters")
         .where("donorID","==",this.state.donorID)
         .onSnapshot((snapshot)=>{
-            var barters = snapshot.docs.map(document=>document.data());
-            this.setState({allBarters: barters});
+          var allBarters = [];
+          snapshot.docs.map((doc)=>{
+            var barter = doc.data();
+            barter["doc_id"] = doc.id;
+            allBarters.push(barter);
+          })
+            this.setState({allBarters: allBarters});
         })
     }
 
@@ -79,8 +84,8 @@ export default class MyBarters extends React.Component {
 
   senditem=(itemDetails)=>{
     if(itemDetails.requestStatus === "Donor Interested"){
-        var requestStatus = "item Sent";
-        db.collection("allDonations").doc(itemDetails.docID)
+        var requestStatus = "Item Sent";
+        db.collection("allBarters").doc(itemDetails.doc_id)
         .update({
             "requestStatus": "item Sent"
         })
@@ -95,7 +100,7 @@ export default class MyBarters extends React.Component {
         key={i}
         title={item.itemName}
         subtitle = {"Requested by: " + item.requestedBy + "\nStatus:" + item.requestStatus}
-        leftElement={<Icon icon name="list" color="#696969"
+        leftElement={<Icon icon name="book" type="font-awesome" color="blue"
         titleStyle={{color: "black", fontWeight: "bold"}}/>}
         rightElement={
         <TouchableOpacity 
@@ -148,12 +153,7 @@ const styles = StyleSheet.create({
       justifyContent:'center',
       alignItems:'center',
       backgroundColor:"#ff5722",
-      shadowColor: "#000",
-      shadowOffset: {
-         width: 0,
-         height: 8
-       },
-      elevation : 16
+      borderRadius: 10
     },
     subtitle :{
       flex:1,

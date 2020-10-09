@@ -52,7 +52,7 @@ export default class ReceiverDetailsScreen extends React.Component {
             itemName: this.state.itemName,
             requestID: this.state.requestID,
             requestedBy: this.state.receiverName,
-            donorID: this.state.receiverId,
+            donorID: this.state.userID,
             requestStatus: "Donor Interested"
         })
     }
