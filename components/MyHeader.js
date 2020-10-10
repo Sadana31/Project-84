@@ -32,9 +32,9 @@ export default class MyHeader extends React.Component {
     return (
       <View>
         <Icon name="bell" type="font-awesome" color="white" size={25}
-         onPress={()=>{
-         this.props.navigation.navigate("Notifications");
-         }}
+         onPress={()=>
+         this.props.navigation.navigate("Notifications")
+         }
         />
          <Badge value={this.state.number}
          containerStyle={{position: "absolute", top:-5, right:-5, color:"lightblue"}}/>

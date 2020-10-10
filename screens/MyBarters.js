@@ -100,7 +100,7 @@ export default class MyBarters extends React.Component {
         key={i}
         title={item.itemName}
         subtitle = {"Requested by: " + item.requestedBy + "\nStatus:" + item.requestStatus}
-        leftElement={<Icon icon name="book" type="font-awesome" color="blue"
+        leftElement={<Icon icon name="book" type="font-awesome" color="black"
         titleStyle={{color: "black", fontWeight: "bold"}}/>}
         rightElement={
         <TouchableOpacity 
